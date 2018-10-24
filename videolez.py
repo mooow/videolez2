@@ -25,7 +25,8 @@ import requests
 import sys
 
 XPATH_LIST_LESSON_URLS = r"//div[@id='lessonList']/ul/li/a/@href"
-XPATH_LESSON_DOWNLOAD_URL = r"//a[text() = 'Video']/@href"
+XPATH_LESSON_DOWNLOAD_URL_HQ = r"//a[text() = 'Video']/@href"
+XPATH_LESSON_DOWNLOAD_URL_LQ = r"//a[text() = 'iPhone']/@href"
 
 def _get_html(url):
     page = requests.get(url)
@@ -63,8 +64,12 @@ def download_all(origin):
             download( _url_join(baseurl, url))
 
 if __name__ == "__main__":
+    XPATH_LESSON_DOWNLOAD_URL = XPATH_LESSON_DOWNLOAD_URL_HQ
+    for arg in sys.argv[2:]:
+        if arg.lower() == "-lq":
+            XPATH_LESSON_DOWNLOAD_URL = XPATH_LESSON_DOWNLOAD_URL_LQ
     try:
         download_all(sys.argv[1])
     except IndexError:
-        print("Usage: {} <URL>".format(sys.argv[0]))
+        print("Usage: {} <URL> [-lq] ".format(sys.argv[0]))
         exit(1)
