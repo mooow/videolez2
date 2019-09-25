@@ -29,7 +29,7 @@ XPATH_LESSON_DOWNLOAD_URL_HQ = r"//a[text() = 'Video']/@href"
 XPATH_LESSON_DOWNLOAD_URL_LQ = r"//a[text() = 'iPhone']/@href"
 
 def _get_html(url):
-    page = requests.get(url)
+    page = requests.get(url, verify=False)
     html = lxml.html.fromstring(page.content)
     return html
 
@@ -45,7 +45,7 @@ def download(lesson_url):
     base_url = _base_url(lesson_url)
     download_url = html.xpath(XPATH_LESSON_DOWNLOAD_URL)[0]
 
-    r = requests.get(_url_join(base_url, download_url), stream=True)
+    r = requests.get(_url_join(base_url, download_url), stream=True, verify=False)
     print(r.url)
     # filename = _filename(r.url)
     # print(filename)
